@@ -1,25 +1,25 @@
 package ru.netology.boldarev;
 
-import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
-        StringBuilder stringBuilder = new StringBuilder();
 
         Scanner scanner = new Scanner(System.in);
 
         int count = 0;
 
         String name;
-        int sum;
-        
+        double sum;
+        int date;
+
+        double[] sumRepository = new double[5];
+        String[] nameRepository = new String[5];
+        int[] currentDateRepository = new int[5];
 
         System.out.println("Hello, Max!");
 
         while (count < 5) {
-            Date currentDate = new Date();
 
             System.out.println("Введите имя получателя: ");
             name = scanner.next();
@@ -27,17 +27,38 @@ public class Main {
             System.out.println("Введите сумму: ");
             sum = scanner.nextInt();
 
-            stringBuilder.append("Сумма: ")
-                    .append(sum)
-                    .append(", отправлена получателю: ")
-                    .append(name).append(" Дата отправки: ")
-                    .append(currentDate).append("\n");
+            System.out.println("Введите Дату: ");
+            date = scanner.nextInt();
+
+            sumRepository[count] = sum;
+            nameRepository[count] = name;
+            currentDateRepository[count] = date;
 
             count++;
         }
 
-        String result = stringBuilder.toString();
+        printTransaction(currentDateRepository, nameRepository, sumRepository);
 
-        System.out.println(result);
+    }
+
+    public static void printTransaction(int[] currentDateRepository, String[] nameRepository, double[] sumRepository) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Введите диапазон дат для поиска");
+
+        int dateFirst = scanner.nextInt();
+        int dateSecond = scanner.nextInt();
+
+        while (dateFirst < dateSecond) {
+            for (int i = 0; i < currentDateRepository.length; i++) {
+                if (currentDateRepository[i] == dateFirst) {
+                    System.out.println("Имя получателя " + nameRepository[i] + ", " +
+                            "Сумма " + sumRepository[i] + ", " +
+                            "Дата " + currentDateRepository[i] + " Февраля.");
+                }
+            }
+            dateFirst++;
+        }
     }
 }
+
