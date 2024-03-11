@@ -1,5 +1,6 @@
 package ru.netology.boldarev.repository;
 
+import ru.netology.boldarev.exception.OperationRuntimeException;
 import ru.netology.boldarev.service.ConsolePrintable;
 import ru.netology.boldarev.model.Customer;
 
@@ -11,14 +12,18 @@ public class CustomerRepository implements ConsolePrintable {
 
     Customer[] customers = new Customer[100];
 
-    public void addCustomer(Customer customer) {
+    public void addCustomer(Customer customer) throws OperationRuntimeException {
         if (count == 99) {
             System.out.println("Репозиторий заполнен");
         } else {
-            Customer customerId = new Customer(id, customer);
-            customers[count] = customerId;
-            id++;
-            count++;
+            try {
+                Customer customerId = new Customer(id, customer);
+                customers[count] = customerId;
+                id++;
+                count++;
+            } catch (OperationRuntimeException e){
+                System.out.println("Ошибка добавления получателя");
+            }
         }
     }
 

@@ -1,10 +1,11 @@
 package ru.netology.boldarev.repository;
 
+import ru.netology.boldarev.exception.CustomerOperationOutOfBoundException;
 import ru.netology.boldarev.service.ConsolePrintable;
 import ru.netology.boldarev.model.Operation;
 
 public class OperationRepository implements ConsolePrintable {
-    private static int id = 1;
+    private static int operationId = 1;
 
     private static int count = 0;
 
@@ -12,15 +13,19 @@ public class OperationRepository implements ConsolePrintable {
 
     static Operation[] operations = new Operation[100];
 
-    public void addOperation(Operation operation, int customerId) {
+    public void addOperation(Operation operation, int customerId) throws CustomerOperationOutOfBoundException{
         if (count == 99) {
             System.out.println("Репозиторий заполнен");
         } else {
-            Operation operationId = new Operation(id, operation);
-            operations[count] = operationId;
-            statement[customerId][count] = id;
-            id++;
-            count++;
+            try {
+                Operation operationsId = new Operation(operationId, operation);
+                operations[count] = operationsId;
+                statement[customerId][count] = operationId;
+                operationId++;
+                count++;
+            } catch (CustomerOperationOutOfBoundException e) {
+                System.out.println(new CustomerOperationOutOfBoundException(customerId, operationId).getMessage());
+            }
         }
     }
 
@@ -40,7 +45,7 @@ public class OperationRepository implements ConsolePrintable {
         int count1 = 0;
         for (int i = 0; i < statement.length; i++) {
             Operation operation = operations[i];
-            if(operation != null){
+            if (operation != null) {
                 if (operation.getId() == statement[clientId][i]) {
                     operations1[count1] = operation;
                     count1++;
