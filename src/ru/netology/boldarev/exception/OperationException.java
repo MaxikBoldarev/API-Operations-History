@@ -1,3 +1,4 @@
 package ru.netology.boldarev.exception;
 
-public class OperationException extends Exception {}
+public class OperationException extends Exception {
+}

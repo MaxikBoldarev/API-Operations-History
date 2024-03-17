@@ -1,15 +1,13 @@
 package ru.netology.boldarev.model;
 
-public class Operation {
+import java.io.Serializable;
+
+public class Operation implements Serializable {
 
     private double amount;
     private int date;
 
     private int id;
-
-    public Operation() {
-
-    }
 
     public Operation(int id, Operation operation) {
         this.id = id;

@@ -1,6 +1,8 @@
 package ru.netology.boldarev.model;
 
-public class Customer {
+import java.io.Serializable;
+
+public class Customer implements Serializable {
     private String firstName;
     private String secondName;
     private int age;
@@ -18,9 +20,9 @@ public class Customer {
     public Customer(String firstName, String secondName, int age) {
         this.firstName = firstName;
         this.secondName = secondName;
-        if(age < 18 || age > 80){
+        if (age < 18 || age > 80) {
             this.age = 18;
-        } else{
+        } else {
             this.age = age;
         }
     }

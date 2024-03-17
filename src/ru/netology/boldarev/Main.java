@@ -1,24 +1,37 @@
 package ru.netology.boldarev;
 
-
-import ru.netology.boldarev.exception.OperationException;
 import ru.netology.boldarev.model.Customer;
 import ru.netology.boldarev.model.Operation;
 import ru.netology.boldarev.repository.CustomerRepository;
 import ru.netology.boldarev.repository.OperationRepository;
+import ru.netology.boldarev.serializable.OperationData;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws OperationException {
+
+    static final String PATH = "D:\\save.ser" ;
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
 
         CustomerRepository customerRepository = new CustomerRepository();
         OperationRepository operationRepository = new OperationRepository();
+
+        OperationData operationData;
+
         Customer customer;
         Operation operation;
 
+        //Проверка на наличие файла и дессериализация
+        Path serializable = Paths.get(PATH);
+        existAndSerializable(serializable);
 
-        Scanner scanner = new Scanner(System.in);
 
         boolean b = true;
 
@@ -31,7 +44,8 @@ public class Main {
                     3. Вывести список операций по получателю
                     4. Вывести полный список получателей
                     5. Вывести полный список операций
-                    6. Заверщение работы
+                    6. Сохранить операции в файл
+                    7. Заверщение работы
                     """);
 
             int command = scanner.nextInt();
@@ -66,7 +80,7 @@ public class Main {
                     System.out.println("Введите имя получателя: ");
                     String nameCustomer = scanner.next();
                     int nameId = customerRepository.findCustomerRepo(nameCustomer);
-                    Operation[] operationsCustomer = OperationRepository.getOperations(nameId);
+                    Operation[] operationsCustomer = operationRepository.getOperationsCustomer(nameId);
                     operationRepository.printOperation(operationsCustomer);
                     break;
                 case 4:
@@ -78,6 +92,17 @@ public class Main {
                     operationRepository.print();
                     break;
                 case 6:
+                    try (FileOutputStream outputStream = new FileOutputStream(PATH)) {
+                        operationData = new OperationData(operationRepository.getOperations(), customerRepository.getCustomers(), operationRepository.getStatement());
+                        System.out.println(operationData);
+                        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                        objectOutputStream.writeObject(operationData);
+                        objectOutputStream.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                case 7:
                     System.out.println("Это было супер!");
                     b = false;
                     break;
@@ -86,6 +111,28 @@ public class Main {
                     break;
             }
         }
+    }
+
+    private static void existAndSerializable(Path path) {
+        if (Files.exists(path)) {
+            try (FileInputStream fileInputStream = new FileInputStream(String.valueOf(path));
+                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+                OperationData operationData = (OperationData) objectInputStream.readObject();
+
+                CustomerRepository customerRepository = new CustomerRepository();
+                customerRepository.setCustomers(operationData.getCustomers());
+
+
+                OperationRepository operationRepository = new OperationRepository();
+                operationRepository.setStatement(operationData.getStatement());
+                operationRepository.setOperation(operationData.getOperations());
+
+                System.out.println(operationData);
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Ошибка восстановления данных");
+            }
+        } else
+            System.out.printf("'%s' не сущетсвует%n", path);
     }
 }
 
