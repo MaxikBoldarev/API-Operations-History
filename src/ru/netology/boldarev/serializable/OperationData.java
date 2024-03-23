@@ -2,45 +2,42 @@ package ru.netology.boldarev.serializable;
 
 import ru.netology.boldarev.model.Customer;
 import ru.netology.boldarev.model.Operation;
+import ru.netology.boldarev.model.Statement;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.List;
 
 public class OperationData implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private Operation[] operations;
-    private Customer[] customers;
-    private int[][] statement;
+    private final List<Operation> operationList;
+    private final List<Customer> customerList;
+    private final List<Statement> statementList;
 
-    public OperationData(Operation[] operations, Customer[] customers, int[][] statement) {
-        this.customers = customers;
-        this.operations = operations;
-        this.statement = statement;
+    public OperationData(List<Operation> operationList, List<Customer> customerList, List<Statement> statementList) {
+        this.customerList = customerList;
+        this.operationList = operationList;
+        this.statementList = statementList;
     }
 
 
-    public Operation[] getOperations() {
-        return operations;
+    public List<Operation> getOperations() {
+        return operationList;
     }
 
-    public Customer[] getCustomers() {
-        return customers;
+    public List<Customer> getCustomers() {
+        return customerList;
     }
 
-    public void setCustomers(Customer[] customers) {
-        this.customers = customers;
-    }
-
-    public int[][] getStatement() {
-        return statement;
+    public List<Statement> getStatement() {
+        return statementList;
     }
 
     @Override
     public String toString() {
-        return "Customer: " + Arrays.toString(customers) + '\n' +
-                "Operations: " + Arrays.toString(operations) + '\n' +
-                "Statement: " + Arrays.deepToString(statement);
+        return "Customer: " + customerList + '\n' +
+                "Operations: " + operationList + '\n' +
+                "Statement: " + statementList;
     }
 }
