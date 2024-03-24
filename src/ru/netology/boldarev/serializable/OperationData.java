@@ -2,23 +2,23 @@ package ru.netology.boldarev.serializable;
 
 import ru.netology.boldarev.model.Customer;
 import ru.netology.boldarev.model.Operation;
-import ru.netology.boldarev.model.Statement;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class OperationData implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private final List<Operation> operationList;
     private final List<Customer> customerList;
-    private final List<Statement> statementList;
+    private final Map<Integer, List<Operation>> statementsMap;
 
-    public OperationData(List<Operation> operationList, List<Customer> customerList, List<Statement> statementList) {
+    public OperationData(List<Operation> operationList, List<Customer> customerList, Map<Integer, List<Operation>> statementsMap) {
         this.customerList = customerList;
         this.operationList = operationList;
-        this.statementList = statementList;
+        this.statementsMap = statementsMap;
     }
 
 
@@ -30,14 +30,14 @@ public class OperationData implements Serializable {
         return customerList;
     }
 
-    public List<Statement> getStatement() {
-        return statementList;
+    public Map<Integer, List<Operation>> getStatement() {
+        return statementsMap;
     }
 
     @Override
     public String toString() {
         return "Customer: " + customerList + '\n' +
                 "Operations: " + operationList + '\n' +
-                "Statement: " + statementList;
+                "Statement: " + statementsMap;
     }
 }

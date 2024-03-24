@@ -18,9 +18,10 @@ public class IOService {
     public static final StorageService<Operation> operationStorageService = new StorageService<>();
     public static final StatementService statementService = new StatementService();
 
-    Scanner scanner = new Scanner(System.in);
+    public static OperationService operationService = new OperationService();
     CustomerService customerService = new CustomerService();
-    OperationService operationService = new OperationService();
+
+    Scanner scanner = new Scanner(System.in);
 
     public void addCustomer() {
         System.out.println("Введите Имя получателя: ");
@@ -32,7 +33,7 @@ public class IOService {
         customerService.add(customer);
     }
 
-    public void addOperation() {
+    public void addOperation(AsyncInputOperationService asyncInputOperationService) {
         System.out.println("Введите сумму: ");
         double amount = scanner.nextDouble();
         System.out.println("Введите дату: ");
@@ -44,9 +45,9 @@ public class IOService {
             System.out.println("Повторите попытку.");
         } else {
             int countId = operationService.countId();
-            statementService.addId(customerId, countId);
             Operation operation = new Operation(countId, amount, date);
-            operationService.addOperation(operation);
+            statementService.addId(customerId, operation);
+            System.out.println(asyncInputOperationService.offerOperation(operation));
         }
     }
 
@@ -89,7 +90,6 @@ public class IOService {
                 operationStorageService.setList(operationData.getOperations());
 
                 statementService.setStatementRepository(operationData.getStatement());
-
 
                 System.out.println(operationData);
             } catch (IOException | ClassNotFoundException e) {

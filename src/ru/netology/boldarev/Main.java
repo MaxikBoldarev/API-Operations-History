@@ -1,12 +1,18 @@
 package ru.netology.boldarev;
 
+import ru.netology.boldarev.service.AsyncInputOperationService;
 import ru.netology.boldarev.service.IOService;
 
 import java.util.Scanner;
 
+import static ru.netology.boldarev.service.IOService.operationService;
+
 public class Main {
 
     public static void main(String[] args) {
+
+        AsyncInputOperationService asyncInputOperationService = new AsyncInputOperationService(operationService);
+        asyncInputOperationService.startAsyncOperationProcessing();
 
         IOService ioService = new IOService();
         Scanner scanner = new Scanner(System.in);
@@ -36,7 +42,7 @@ public class Main {
                     ioService.addCustomer();
                     break;
                 case 2:
-                    ioService.addOperation();
+                    ioService.addOperation(asyncInputOperationService);
                     break;
                 case 3:
                     ioService.printOperationByCustomer();

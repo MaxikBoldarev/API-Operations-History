@@ -1,22 +1,24 @@
 package ru.netology.boldarev.repository;
 
-import ru.netology.boldarev.model.Statement;
+import ru.netology.boldarev.model.Operation;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StatementRepository {
-    private List<Statement> statements = new ArrayList<>();
 
-    public void add(Statement statement){
-        statements.add(statement);
+    Map<Integer, List<Operation>> statements = new HashMap<>();
+
+    public void add(Integer integer, List<Operation> list){
+        statements.put(integer, list);
     }
 
-    public List<Statement> getStatements(){
+    public Map<Integer, List<Operation>> getStatements(){
         return statements;
     }
 
-    public void setStatements(List<Statement> statements){
+    public void setStatements(Map<Integer, List<Operation>> statements){
         this.statements = statements;
     }
 }
